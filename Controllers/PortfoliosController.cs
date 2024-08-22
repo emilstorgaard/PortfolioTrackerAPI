@@ -8,7 +8,7 @@ namespace PortfolioTrackerAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PortfolioController(PortfolioService portfolioService, IConfiguration configuration) : ControllerBase
+    public class PortfoliosController(PortfolioService portfolioService, IConfiguration configuration) : ControllerBase
     {
         private readonly PortfolioService _portfolioService = portfolioService;
         private readonly string _jwtSecret = configuration["JwtSettings:Secret"];
