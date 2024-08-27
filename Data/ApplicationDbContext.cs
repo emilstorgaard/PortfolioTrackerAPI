@@ -11,5 +11,20 @@ namespace PortfolioTrackerAPI.Data
         }
 
         public DbSet<Portfolio> Portfolios { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.Price)
+                .HasPrecision(18, 4); // Precision 18, scale 4 (e.g., 12345678901234.5678)
+
+            // Repeat for other decimal properties if needed
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.Quantity)
+                .HasPrecision(18, 4);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

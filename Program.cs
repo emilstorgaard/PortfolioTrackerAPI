@@ -65,6 +65,7 @@ builder.Services.AddAuthentication(options =>
 
 // Register services
 builder.Services.AddScoped<PortfolioService>();
+builder.Services.AddScoped<TransactionService>();
 
 builder.Services.AddCors(options =>
 {
