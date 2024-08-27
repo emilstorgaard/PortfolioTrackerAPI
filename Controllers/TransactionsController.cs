@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PortfolioTrackerAPI.Models.Dtos;
 using PortfolioTrackerAPI.Services;
-using System.Security.Claims;
 
 namespace PortfolioTrackerAPI.Controllers
 {
