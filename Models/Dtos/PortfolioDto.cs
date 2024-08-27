@@ -1,6 +1,6 @@
 ﻿namespace PortfolioTrackerAPI.Models.Dtos
 {
-    public class AddPortfolioDto
+    public class PortfolioDto
     {
         public required string Name { get; set; }
     }

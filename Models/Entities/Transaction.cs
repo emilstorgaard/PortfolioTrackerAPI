@@ -1,4 +1,6 @@
-﻿namespace PortfolioTrackerAPI.Models.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace PortfolioTrackerAPI.Models.Entities
 {
     public class Transaction
     {
@@ -14,5 +16,8 @@
         public DateTime Date { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        [JsonIgnore]
+        public Portfolio Portfolio { get; set; }
     }
 }

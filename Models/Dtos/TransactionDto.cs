@@ -1,6 +1,6 @@
 ﻿namespace PortfolioTrackerAPI.Models.Dtos
 {
-    public class AddTransactionDto
+    public class TransactionDto
     {
         public Guid PortfolioId { get; set; }
         public string InvestmentName { get; set; }
