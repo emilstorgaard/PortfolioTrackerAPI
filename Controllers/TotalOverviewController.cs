@@ -6,14 +6,14 @@ namespace PortfolioTrackerAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OverviewsController : ControllerBase
+    public class TotalOverviewController : ControllerBase
     {
-        private readonly OverviewService _overviewService;
+        private readonly TotalOverviewService _totalOverviewService;
         private readonly UserService _userService;
 
-        public OverviewsController(OverviewService overviewService, UserService userService)
+        public TotalOverviewController(TotalOverviewService totalOverviewService, UserService userService)
         {
-            _overviewService = overviewService;
+            _totalOverviewService = totalOverviewService;
             _userService = userService;
         }
 
@@ -24,8 +24,8 @@ namespace PortfolioTrackerAPI.Controllers
             var userId = _userService.GetUserId();
             if (userId == null) return BadRequest("Invalid user ID in token.");
 
-            var Overview = await _overviewService.GetTotalOverviewAsync(userId.Value);
-            return Ok(Overview);
+            var totalOverview = await _totalOverviewService.GetTotalOverviewAsync(userId.Value);
+            return Ok(totalOverview);
         }
     }
 }

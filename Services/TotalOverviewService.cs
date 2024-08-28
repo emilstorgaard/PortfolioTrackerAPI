@@ -4,11 +4,11 @@ using PortfolioTrackerAPI.Models.Dtos;
 
 namespace PortfolioTrackerAPI.Services
 {
-    public class OverviewService : IOverviewService
+    public class TotalOverviewService : ITotalOverviewService
     {
         public readonly ApplicationDbContext _dbContext;
 
-        public OverviewService(ApplicationDbContext dbContext)
+        public TotalOverviewService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

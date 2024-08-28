@@ -67,7 +67,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<PortfolioService>();
 builder.Services.AddScoped<TransactionService>();
-builder.Services.AddScoped<OverviewService>();
+builder.Services.AddScoped<TotalOverviewService>();
 builder.Services.AddScoped<UserService>();
 
 builder.Services.AddCors(options =>

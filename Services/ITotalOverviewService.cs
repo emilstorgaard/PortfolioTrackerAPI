@@ -2,7 +2,7 @@
 
 namespace PortfolioTrackerAPI.Services
 {
-    public interface IOverviewService
+    public interface ITotalOverviewService
     {
         Task<TotalOverviewDto> GetTotalOverviewAsync(Guid userId);
     }
