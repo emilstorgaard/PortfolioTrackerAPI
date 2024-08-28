@@ -14,27 +14,37 @@ namespace PortfolioTrackerAPI.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<Transaction>> GetAllTransactionsByUserAsync(Guid userId)
+        public async Task<List<Transaction>> GetAllTransactionsAsync(Guid userId)
         {
             return await _dbContext.Transactions
                 .Where(t => t.Portfolio.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<Transaction> GetTransactionByIdAsync(Guid id, Guid userId)
-        {
-            return await _dbContext.Transactions.FirstOrDefaultAsync(t => t.Id == id && t.Portfolio.UserId == userId);
-        }
-
-        public async Task<List<Transaction>> GetAllTransactiosByPortfolioAsync(Guid portfolioId)
+        public async Task<Transaction?> GetTransactionByIdAsync(Guid id, Guid userId)
         {
             return await _dbContext.Transactions
-                .Where(t => t.PortfolioId == portfolioId)
+                .FirstOrDefaultAsync(t => t.Id == id && t.Portfolio.UserId == userId);
+        }
+
+        public async Task<List<Transaction>> GetAllTransactiosByPortfolioAsync(Guid userId, Guid portfolioId)
+        {
+            return await _dbContext.Transactions
+                .Where(t => t.PortfolioId == portfolioId && t.Portfolio.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<Transaction> AddTransactionAsync(TransactionDto addTransactionDto)
+        public async Task<bool?> AddTransactionAsync(Guid userId, TransactionDto addTransactionDto)
         {
+            // Check if the portfolio exists and belongs to the user
+            var portfolio = await _dbContext.Portfolios
+                .FirstOrDefaultAsync(p => p.Id == addTransactionDto.PortfolioId && p.UserId == userId);
+
+            // Portfolio doesn't exist or doesn't belong to the user
+            if (portfolio == null) return null;
+
+            if (addTransactionDto == null) return null;
+
             var transaction = new Transaction
             {
                 PortfolioId = addTransactionDto.PortfolioId,
@@ -52,10 +62,10 @@ namespace PortfolioTrackerAPI.Services
             await _dbContext.Transactions.AddAsync(transaction);
             await _dbContext.SaveChangesAsync();
 
-            return transaction;
+            return true;
         }
 
-        public async Task<Transaction?> UpdateTransactionAsync(Guid id, Guid userId, TransactionDto transactionDto)
+        public async Task<bool?> UpdateTransactionAsync(Guid id, Guid userId, TransactionDto transactionDto)
         {
             var transaction = await _dbContext.Transactions.FirstOrDefaultAsync(t => t.Id == id && t.Portfolio.UserId == userId);
             if (transaction == null) return null;
@@ -70,7 +80,7 @@ namespace PortfolioTrackerAPI.Services
 
             await _dbContext.SaveChangesAsync();
 
-            return transaction;
+            return true;
         }
 
         public async Task<bool?> DeleteTransactionAsync(Guid id, Guid userId)

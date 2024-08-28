@@ -13,31 +13,45 @@ namespace PortfolioTrackerAPI.Services
             _dbContext = dbContext;
         }
 
-        public async Task<TotalOverviewDto> GetTotalOverviewAsync()
+        public async Task<TotalOverviewDto> GetTotalOverviewAsync(Guid userId)
         {
-            var totalPortfolios = await _dbContext.Portfolios.CountAsync();
+            var totalOverview = new TotalOverviewDto { };
 
-            var transactions = _dbContext.Transactions.AsQueryable();
+            // Filter portfolios by userId
+            var userPortfolios = _dbContext.Portfolios.Where(p => p.UserId == userId);
 
-            var totalTransactions = await transactions.CountAsync();
-            var totalInvestedAmount = await transactions.SumAsync(t => t.Quantity * t.Price); // Ændret her
-            var firstInvestmentDate = await transactions.MinAsync(t => t.Date);
-            var lastInvestmentDate = await transactions.MaxAsync(t => t.Date);
+            // Count the total number of portfolios for the user
+            var totalPortfolios = await userPortfolios.CountAsync();
+            totalOverview.TotalPortfolios = totalPortfolios;
+
+            // Filter transactions by portfolios belonging to the user
+            var userTransactions = _dbContext.Transactions.Where(t => userPortfolios.Any(p => p.Id == t.PortfolioId));
+
+            // Calculate total number of transactions for the user
+            var totalTransactions = await userTransactions.CountAsync();
+            totalOverview.TotalTransactions = totalTransactions;
+
+            // Calculate total invested amount for the user
+            var totalInvestedAmount = await userTransactions.SumAsync(t => t.Quantity * t.Price);
+            totalOverview.TotalInvestedAmount = totalInvestedAmount;
+
+            // Only perform these calculations if there are transactions
+            if (totalTransactions > 0)
+            {
+                // Get the first and last investment dates for the user
+                var firstInvestmentDate = await userTransactions.MinAsync(t => t.Date);
+                totalOverview.FirstInvestmentDate = firstInvestmentDate;
+
+                var lastInvestmentDate = await userTransactions.MaxAsync(t => t.Date);
+                totalOverview.LastInvestmentDate = lastInvestmentDate;
+            }
 
             var averageInvestmentPerTransaction = totalTransactions > 0
                 ? totalInvestedAmount / totalTransactions
                 : 0;
 
-            var totalOverview = new TotalOverviewDto
-            {
-                TotalPortfolios = totalPortfolios,
-                TotalTransactions = totalTransactions,
-                TotalInvestedAmount = totalInvestedAmount,
-                AverageInvestmentPerTransaction = averageInvestmentPerTransaction,
-                FirstInvestmentDate = firstInvestmentDate,
-                LastInvestmentDate = lastInvestmentDate
-            };
-
+            totalOverview.AverageInvestmentPerTransaction = averageInvestmentPerTransaction;
+            
             return totalOverview;
         }
     }

@@ -14,20 +14,23 @@ namespace PortfolioTrackerAPI.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<Portfolio>> GetAllPortfoliosByUserAsync(Guid userId)
+        public async Task<List<Portfolio>> GetAllPortfoliosAsync(Guid userId)
         {
             return await _dbContext.Portfolios
                 .Where(p => p.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<Portfolio> GetPortfolioByIdAsync(Guid id)
+        public async Task<Portfolio?> GetPortfolioByIdAsync(Guid id, Guid userId)
         {
-            return await _dbContext.Portfolios.FindAsync(id);
+            return await _dbContext.Portfolios
+                .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
         }
 
-        public async Task<Portfolio> AddPortfolioAsync(PortfolioDto portfolioDto, Guid userId)
+        public async Task<bool?> AddPortfolioAsync(Guid userId, PortfolioDto portfolioDto)
         {
+            if (portfolioDto == null) return null;
+
             var portfolio = new Portfolio
             {
                 Name = portfolioDto.Name,
@@ -39,10 +42,10 @@ namespace PortfolioTrackerAPI.Services
             await _dbContext.Portfolios.AddAsync(portfolio);
             await _dbContext.SaveChangesAsync();
 
-            return portfolio;
+            return true;
         }
 
-        public async Task<Portfolio?> UpdatePortfolioAsync(Guid id, Guid userId, PortfolioDto portfolioDto)
+        public async Task<bool?> UpdatePortfolioAsync(Guid id, Guid userId, PortfolioDto portfolioDto)
         {
             var portfolio = await _dbContext.Portfolios.FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
             if (portfolio == null) return null;
@@ -52,7 +55,7 @@ namespace PortfolioTrackerAPI.Services
 
             await _dbContext.SaveChangesAsync();
 
-            return portfolio;
+            return true;
         }
 
         public async Task<bool?> DeletePortfolioAsync(Guid id, Guid userId)
