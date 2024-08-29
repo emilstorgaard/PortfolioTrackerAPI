@@ -44,6 +44,18 @@ namespace PortfolioTrackerAPI.Controllers
         }
 
         [Authorize]
+        [HttpGet("Overview/{id:guid}")]
+        public async Task<IActionResult> GetPortfolioOverview(Guid id)
+        {
+            var userId = _userService.GetUserId();
+            if (userId == null) return BadRequest("Invalid user ID in token.");
+            if (id == Guid.Empty) return BadRequest("Portfolio ID is required.");
+
+            var overview = await _portfolioService.GetPortfolioOverviewAsync(id, userId.Value);
+            return Ok(overview);
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddPortfolio(PortfolioDto portfolioDto)
         {
