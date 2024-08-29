@@ -69,6 +69,7 @@ builder.Services.AddScoped<PortfolioService>();
 builder.Services.AddScoped<TransactionService>();
 builder.Services.AddScoped<TotalOverviewService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<HoldingService>();
 
 builder.Services.AddCors(options =>
 {

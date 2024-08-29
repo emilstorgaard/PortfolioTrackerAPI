@@ -41,7 +41,6 @@ namespace PortfolioTrackerAPI.Services
             // Filter transactions by portfolios belonging to the user
             var portfolioTransactions = _dbContext.Transactions.Where(t => t.PortfolioId == id && t.Portfolio.UserId == userId);
 
-
             // Calculate total number of transactions for the portfolio
             var totalTransactions = await portfolioTransactions.CountAsync();
             portfolioOverview.TotalTransactions = totalTransactions;
