@@ -24,6 +24,11 @@ namespace PortfolioTrackerAPI.Data
                 .Property(t => t.Quantity)
                 .HasPrecision(18, 4);
 
+            // Configure EF Core to store the enum as a string
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.Type)
+                .HasConversion<string>();
+
             base.OnModelCreating(modelBuilder);
         }
     }

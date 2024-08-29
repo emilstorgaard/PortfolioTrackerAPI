@@ -49,7 +49,6 @@ namespace PortfolioTrackerAPI.Services
             {
                 PortfolioId = addTransactionDto.PortfolioId,
                 InvestmentName = addTransactionDto.InvestmentName,
-                InvestmentType = addTransactionDto.InvestmentType,
                 Type = addTransactionDto.Type,
                 Quantity = addTransactionDto.Quantity,
                 Price = addTransactionDto.Price,
@@ -71,7 +70,6 @@ namespace PortfolioTrackerAPI.Services
             if (transaction == null) return null;
 
             transaction.InvestmentName = transactionDto.InvestmentName;
-            transaction.InvestmentType = transactionDto.InvestmentType;
             transaction.Type = transactionDto.Type;
             transaction.Quantity = transactionDto.Quantity;
             transaction.Price = transactionDto.Price;

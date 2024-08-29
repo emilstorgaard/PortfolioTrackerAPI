@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using PortfolioTrackerAPI.Models.Enums;
+using System.Text.Json.Serialization;
 
 namespace PortfolioTrackerAPI.Models.Entities
 {
@@ -7,8 +8,7 @@ namespace PortfolioTrackerAPI.Models.Entities
         public Guid Id { get; set; }
         public Guid PortfolioId { get; set; }
         public string InvestmentName { get; set; }
-        public string InvestmentType { get; set; }
-        public string Type { get; set; }
+        public TransactionTypeEnum Type { get; set; }
         public decimal Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal TotalValue => Quantity * Price;
